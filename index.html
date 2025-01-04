@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8"> <!-- 초기 비율 축소 -->
+    <title>이예나_html</title>
+    <style>
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background-color: #b3c9ff; /* 연한 파랑 */
+            color: #333; 
+            text-align: center; 
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .container { 
+            width: 100%;
+            max-width: 700px; /* 최대 너비 줄임 */
+            margin: 0 auto; 
+            padding: 15px; 
+            background: white; 
+            border-radius: 10px; 
+            display: flex; 
+            flex-direction: column; /* 세로 배치 */
+            align-items: center;
+        }
+
+        .input-section, .statistics-section {
+            width: 100%; /* 각 섹션을 100%로 설정 */
+            margin-bottom: 15px; /* 섹션 간격 축소 */
+        }
+
+        .form-group { 
+            margin-bottom: 15px; /* 폼 그룹 간격 축소 */
+            text-align: center;
+        }
+
+        .btn { 
+            padding: 8px 16px; /* 버튼 크기 줄임 */
+            margin: 8px 0; 
+            background: #3388ff; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            width: 100%;
+        }
+
+        .btn:hover { 
+            background: #0066cc; 
+        }
+
+        select, input { 
+            padding: 6px; /* 입력 필드 여백 줄임 */
+            margin: 8px 0; 
+            font-size: 12px; /* 폰트 크기 줄임 */
+            border-radius: 6px; 
+            width: 100%; 
+        }
+
+        label { 
+            font-size: 14px; /* 라벨 크기 줄임 */
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        table { 
+            width: 100%; 
+            margin-top: 15px; 
+            border-collapse: collapse; 
+        }
+
+        th, td { 
+            padding: 10px 12px;  
+            text-align: center; 
+            border: 1px solid #3388ff; 
+        }
+
+        th:nth-child(2), td:nth-child(2) { 
+            width: 50px; /* '근무 요일' 열의 가로 폭 축소 */
+        }
+
+        th { 
+            background: #3388ff; 
+            color: white; 
+        }
+
+        .delete-btn { 
+            background-color: #0066cc; 
+            color: white; 
+            padding: 4px 8px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+        }
+
+        .delete-btn:hover { 
+            background-color: #005bb5; 
+        }
+
+        .total-time { 
+            margin-top: 15px; 
+            font-size: 18px; /* 글자 크기 줄임 */
+            color: #0066cc; 
+            font-weight: bold; 
+        }
+
+        .total-time strong {
+            font-size: 24px; /* 더 큰 누적 시간 폰트 */
+            color: #3388ff;    
+        }
+
+        /* 모바일에서 더 잘 보이게 하기 위한 반응형 설정 */
+        @media (max-width: 768px) {
+            body {
+                font-size: 12px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .container {
+                padding: 12px; 
+            }
+
+            .form-group {
+                margin-bottom: 12px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 10px;
+            }
+
+            table th, table td {
+                padding: 8px;
+                font-size: 10px; /* 테이블 글자 크기 더 줄임 */
+            }
+
+            .total-time {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2> 알바 시간 기록 ٩( ᐢ-ᐢ )و </h2>
+
+<div class="container">
+    <!-- 입력 섹션 -->
+    <div class="input-section">
+        <div class="form-group">
+            <h3>근무 날짜</h3>
+            <input type="date" id="work-date" onchange="updateSelectedDay()">
+        </div>
+        
+        <div class="form-group">
+            <h3>근무 요일</h3>
+            <select id="weekday">
+                <option value="월">월</option>
+                <option value="화">화</option>
+                <option value="수">수</option>
+                <option value="목">목</option>
+                <option value="금">금</option>
+                <option value="토">토</option>
+                <option value="일">일</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <h3>근무 시작 시간</h3>
+            <div>
+                <select id="start-hour">
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select> :
+                <select id="start-minute">
+                    <option value="00">00</option>
+                    <option value="05">05</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                    <option value="55">55</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h3>근무 종료 시간</h3>
+            <div>
+                <select id="end-hour">
+                    <option value="00">00</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select> :
+                <select id="end-minute">
+                    <option value="00">00</option>
+                    <option value="05">05</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                    <option value="55">55</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button class="btn" onclick="saveWorkTime()">근무 시간 저장</button>
+        </div>
+    </div>
+
+    <!-- 통계 섹션 -->
+    <div class="statistics-section">
+        <h3>근무 시간 통계</h3>
+        <table id="work-table">
+            <thead><tr><th>날짜</th><th>근무 요일</th><th>근무 시간</th><th>삭제</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <div class="total-time" id="total-time">누적 근무 시간: <strong>0시간 0분</strong></div>
+    </div>
+</div>
+
+<script>
+    let workData = [];
+
+    function loadWorkData() {
+        const savedData = localStorage.getItem('workData');
+        if (savedData) {
+            workData = JSON.parse(savedData);
+            updateWorkTable();
+        }
+    }
+
+    window.onload = loadWorkData;
+
+    function updateSelectedDay() {
+        const workDate = document.getElementById('work-date').value;
+        const weekdaySelect = document.getElementById('weekday');
+        
+        if (!workDate) return;
+
+        const date = new Date(workDate);
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const weekday = weekdays[date.getDay()];
+
+        weekdaySelect.value = weekday;
+    }
+
+    function calculateWorkDuration(startHour, startMinute, endHour, endMinute) {
+        const startTotalMinutes = parseInt(startHour) * 60 + parseInt(startMinute);
+        const endTotalMinutes = parseInt(endHour) * 60 + parseInt(endMinute);
+
+        let durationMinutes = endTotalMinutes - startTotalMinutes;
+        if (durationMinutes < 0) {
+            durationMinutes += 24 * 60;
+        }
+
+        const hours = Math.floor(durationMinutes / 60);
+        const minutes = durationMinutes % 60;
+        return { hours, minutes };
+    }
+
+    function saveWorkTime() {
+        const workDate = document.getElementById('work-date').value;
+        const weekday = document.getElementById('weekday').value;
+        const startHour = document.getElementById('start-hour').value;
+        const startMinute = document.getElementById('start-minute').value;
+        const endHour = document.getElementById('end-hour').value;
+        const endMinute = document.getElementById('end-minute').value;
+
+        if (!workDate) {
+            alert("날짜를 선택해주세요.");
+            return;
+        }
+
+        if (startHour === endHour && startMinute === endMinute) {
+            alert("근무 시작 시간과 종료 시간이 같을 수 없습니다.");
+            return;
+        }
+
+        const { hours, minutes } = calculateWorkDuration(startHour, startMinute, endHour, endMinute);
+
+        const newWorkEntry = {
+            date: workDate,
+            weekday,
+            startTime: `${startHour}:${startMinute}`,
+            endTime: `${endHour}:${endMinute}`,
+            duration: { hours, minutes },
+        };
+
+        workData.push(newWorkEntry);
+
+        localStorage.setItem('workData', JSON.stringify(workData));
+        updateWorkTable();
+    }
+
+    function updateWorkTable() {
+        const tableBody = document.querySelector('#work-table tbody');
+        tableBody.innerHTML = '';
+        let totalHours = 0;
+        let totalMinutes = 0;
+
+        workData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        workData.forEach((entry, index) => {
+            const row = document.createElement('tr');
+            const { hours, minutes } = entry.duration;
+            totalHours += hours;
+            totalMinutes += minutes;
+
+            if (totalMinutes >= 60) {
+                totalHours += Math.floor(totalMinutes / 60);
+                totalMinutes = totalMinutes % 60;
+            }
+
+            const formattedDate = entry.date.slice(5); // "YYYY-MM-DD" -> "MM-DD"
+            
+            row.innerHTML = `
+                <td>${formattedDate}</td>
+                <td>${entry.weekday}</td>
+                <td>${entry.startTime} ~ ${entry.endTime} (${hours}시간 ${minutes}분)</td>
+                <td><button class="delete-btn" onclick="deleteWorkTime(${index})">삭제</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        document.getElementById('total-time').innerHTML = `누적 근무 시간: <strong>${totalHours}시간 ${totalMinutes}분</strong>`;
+    }
+
+    function deleteWorkTime(index) {
+        if (confirm('정말 삭제하시겠습니까?')) {
+            workData.splice(index, 1);
+
+            localStorage.setItem('workData', JSON.stringify(workData));
+            updateWorkTable();
+        }
+    }
+</script>
+
+</body>
+</html>
